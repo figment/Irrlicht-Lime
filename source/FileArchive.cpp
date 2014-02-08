@@ -63,5 +63,10 @@ FileArchiveType FileArchive::Type::get()
 	return (FileArchiveType)m_FileArchive->getType();
 }
 
+String^ FileArchive::ArchiveName::get()
+{
+	return gcnew String(m_FileArchive->getArchiveName().c_str());
+}
+
 } // end namespace IO
 } // end namespace IrrlichtLime

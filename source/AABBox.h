@@ -141,6 +141,18 @@ public:
 		return m_NativeValue->isFullInside(*b->m_NativeValue);
 	}
 
+	AABBox^ Intersect(AABBox^ b)
+	{
+		LIME_ASSERT(b != nullptr);
+		return gcnew AABBox(m_NativeValue->intersect(*b->m_NativeValue));
+	}
+
+	bool IntersectsWithBox(AABBox^ b)
+	{
+		LIME_ASSERT(b != nullptr);
+		return m_NativeValue->intersectsWithBox(*b->m_NativeValue);
+	}
+
 	void Repair()
 	{
 		m_NativeValue->repair();

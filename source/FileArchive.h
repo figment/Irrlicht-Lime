@@ -23,6 +23,7 @@ public:
 	property IrrlichtLime::IO::FileList^ FileList { IrrlichtLime::IO::FileList^ get(); }
 	property String^ Password { String^ get(); void set(String^ value); }
 	property FileArchiveType Type { FileArchiveType get(); }
+	property String^ ArchiveName { String^ get(); }
 
 internal:
 

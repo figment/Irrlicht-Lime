@@ -265,16 +265,14 @@ ReadFile^ FileSystem::CreateMemoryReadFile(String^ filename, array<unsigned char
 	LIME_ASSERT(content != nullptr);
 
 	int c = content->Length;
-	unsigned char* m = new unsigned char[c];
-
-	for (int i = 0; i < c; i++)
-		m[i] = content[i];
-
+	pin_ptr<unsigned char> m = &content[0];
 	io::IReadFile* f = m_FileSystem->createMemoryReadFile(
 		m,
 		c,
 		Lime::StringToPath(filename),
-		true /* allocated m will be deleted automatically on drop() */);
+		true, /* allocated m will be deleted automatically on drop() */
+		true  /* let filesystem copy the content and do allocation */
+		);
 
 	return ReadFile::Wrap(f);
 }
@@ -284,13 +282,13 @@ WriteFile^ FileSystem::CreateMemoryWriteFile(String^ filename, int length)
 	LIME_ASSERT(filename != nullptr);
 	LIME_ASSERT(length > 0);
 
-	unsigned char* m = new unsigned char[length];
-
 	io::IWriteFile* f = m_FileSystem->createMemoryWriteFile(
-		m,
+		nullptr,
 		length,
 		Lime::StringToPath(filename),
-		true /* allocated m will be deleted automatically on drop() */);
+		true, /* allocated m will be deleted automatically on drop() */
+		true  /* let filesystem copy the content and do allocation */
+		);
 
 	return WriteFile::Wrap(f);
 }

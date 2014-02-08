@@ -51,7 +51,7 @@ public:
 	The returned pointer should be dropped when no longer needed.
 	See IReferenceCounted::drop() for more information.
 	*/
-	virtual IReadFile* createMemoryReadFile(const void* memory, s32 len, const path& fileName, bool deleteMemoryWhenDropped=false) =0;
+	virtual IReadFile* createMemoryReadFile(const void* memory, s32 len, const path& fileName, bool deleteMemoryWhenDropped=false, bool makeLocalCopy=false) =0;
 
 	//! Creates an IReadFile interface for accessing files inside files.
 	/** This is useful e.g. for archives.
@@ -78,7 +78,7 @@ public:
 	The returned pointer should be dropped when no longer needed.
 	See IReferenceCounted::drop() for more information.
 	*/
-	virtual IWriteFile* createMemoryWriteFile(void* memory, s32 len, const path& fileName, bool deleteMemoryWhenDropped=false) =0;
+	virtual IWriteFile* createMemoryWriteFile(void* memory, s32 len, const path& fileName, bool deleteMemoryWhenDropped=false, bool makeLocalCopy=false) =0;
 
 
 	//! Opens a file for write access.

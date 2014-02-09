@@ -19,7 +19,7 @@ namespace L05.ScreenshotToTexture
 	{
 		static void Main(string[] args)
 		{
-			IrrlichtDevice device = IrrlichtDevice.CreateDevice(DriverType.Direct3D8, new Dimension2Di(512, 512));
+			IrrlichtDevice device = IrrlichtDevice.CreateDevice(DriverType.Direct3D9, new Dimension2Di(512, 512));
 			device.SetWindowCaption("Screenshot to texture - Irrlicht Lime");
 
 			// set up very simple scene {{
@@ -108,20 +108,19 @@ namespace L05.ScreenshotToTexture
 
 			MemoryStream s = new MemoryStream();
 			b.Save(s, ImageFormat.Bmp);
-
 			byte[] c = s.ToArray();
 			s.Close();
-
 			LogLevel o = device.Logger.LogLevel;
-			device.Logger.LogLevel = LogLevel.Error; // we hide all those "Loaded texture" messages in console {{
-
-			ReadFile f = device.FileSystem.CreateMemoryReadFile("screenTexture", c);
-			Texture t = device.VideoDriver.GetTexture(f);
-			f.Drop();
-
-			device.Logger.LogLevel = o; // }}
-
-			return t;
+		    try
+		    {
+                device.Logger.LogLevel = LogLevel.Error; // we hide all those "Loaded texture" messages in console {{
+                using (ReadFile f = device.FileSystem.CreateMemoryReadFile("screenTexture", c))
+		            return device.VideoDriver.GetTexture(f);
+		    }
+		    finally
+		    {
+		        device.Logger.LogLevel = o; // }}
+		    }
 		}
 
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

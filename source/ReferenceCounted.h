@@ -15,8 +15,8 @@ public:
 	static bool operator == (ReferenceCounted^ v1, ReferenceCounted^ v2);
 	static bool operator != (ReferenceCounted^ v1, ReferenceCounted^ v2);
 
-	bool Drop();
-	void Grab();
+	virtual bool Drop();
+	virtual void Grab();
 
 	property String^ DebugName { String^ get(); }
 	property int ReferenceCount { int get(); }
@@ -24,6 +24,8 @@ public:
 internal:
 
 	ReferenceCounted(irr::IReferenceCounted* referenceCounted_or_null);
+	~ReferenceCounted();
+	!ReferenceCounted();
 
 	irr::IReferenceCounted* m_ReferenceCounted;
 };

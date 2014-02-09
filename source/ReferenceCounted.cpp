@@ -30,10 +30,31 @@ ReferenceCounted::ReferenceCounted(irr::IReferenceCounted* referenceCounted_or_n
 	m_ReferenceCounted = referenceCounted_or_null;
 }
 
+ReferenceCounted::~ReferenceCounted()
+{
+	if (m_ReferenceCounted != nullptr) 
+		Drop();
+	m_ReferenceCounted = nullptr;
+}
+
+ReferenceCounted::!ReferenceCounted()
+{
+	// In theory, Drop should be called here in finalizer
+	//  in practice, Irrlicht does not consistently grab
+	//  pointers so not calling drop is consistent with existing code
+	//  but the ~ method due to Dispose gives us better explicit control
+	m_ReferenceCounted = nullptr;
+}
+
 bool ReferenceCounted::Drop()
 {
 	LIME_ASSERT(m_ReferenceCounted != nullptr);
-	return m_ReferenceCounted->drop();
+	if (irr::IReferenceCounted* ref = m_ReferenceCounted)
+	{
+		m_ReferenceCounted = nullptr;
+		return ref->drop();
+	}
+	return false;
 }
 
 void ReferenceCounted::Grab()
